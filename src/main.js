@@ -214,23 +214,23 @@ launchBtn.addEventListener("click", () => {
   })
   .then(response => response.json())
   .then(result => {
-    const display = document.getElementById("resultDisplayOverlay");
-    if (result.stopping_power !== undefined) {
-      display.innerHTML = `
-  <strong>Estimated Stopping Power:</strong> ${result.stopping_power.toFixed(4)} MeV/(mg/cm²)
-  <br />
-  <span style="font-size: 0.9em; color: gray;">
-    ⚠️ This result uses a legacy featurizer stack that may include incomplete or degraded components.
-    Predictions are exploratory and may not reflect physically accurate stopping powers.
-    <br />
-    ℹ️ <em>Note: Starting position is not used in prediction. Only velocity direction and magnitude affect the result.</em>
-  </span>
-`;
+  const display = document.getElementById("resultDisplayOverlay");
+  if (result.stopping_power !== undefined) {
+    display.innerHTML = `
+      <strong>Estimated Stopping Power:</strong> ${result.stopping_power.toFixed(4)} MeV/(mg/cm²)
+      <br />
+      <span style="font-size: 0.9em; color: gray;">
+        ⚠️ This result uses a legacy featurizer stack that may include incomplete or degraded components.
+        Predictions are exploratory and may not reflect physically accurate stopping powers.
+        <br />
+        ℹ️ <em>Note: Starting position is not used in prediction. Only velocity direction and magnitude affect the result.</em>
+      </span>
+    `;
+  } else {
+    display.innerHTML = `<span style="color: red;">Error: ${result.error}</span>`;
+  }
+})
 
-    } else {
-      display.innerHTML = `<span style="color: red;">Error: ${result.error}</span>`;
-    }
-  })
   .catch(err => {
     document.getElementById("resultDisplay").innerHTML =
       `<span style="color: red;">Request failed: ${err.message}</span>`;
@@ -289,6 +289,13 @@ function animate() {
 
 updateProtonPositionFromInputs();
 zoomSlider.dispatchEvent(new Event("input")); // 👈 Initializes zoom
+const display = document.getElementById("resultDisplayOverlay");
+display.innerHTML = `
+  <span style="color: gray;">
+    🔌 Connecting to backend... please wait...
+  </span>
+`;
+
 animate();
 
 
